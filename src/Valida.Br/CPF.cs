@@ -25,14 +25,14 @@ public class CPF
 
     public CPF(int intCpf)
     {
-        _cpfLong = intCpf;
-        _cpf = intCpf.ToString("D11");
+        _cpfLong = intCpf < 0 ? 0 : intCpf;
+        _cpf = _cpfLong.ToString("D11");
     }
 
     public CPF(long longCpf)
     {
-        _cpfLong = longCpf;
-        _cpf = longCpf.ToString("D11");
+        _cpfLong = longCpf < 0 ? 0 : longCpf;
+        _cpf = _cpfLong.ToString("D11");
     }
 
     private int[]? _digitos = null;
@@ -73,6 +73,9 @@ public class CPF
         if (_cpfLong >= maxSize)
             return false;
 
+        if (Digitos.Distinct().Count() == 1)
+            return false;
+
         CalcularDigitoVerificador();
 
         if (PrimeiroDigitoVerificador != _primeiroDigitoVerificadorCalculado)
@@ -89,7 +92,7 @@ public class CPF
         var somaPrimeiroAlgarismo = 0;
         var somaSegundoAlgarismo = 0;
 
-        for (int i = 0; i <= 9; i++)
+        for (int i = 0; i < 9; i++)
         {
             somaPrimeiroAlgarismo += Digitos[i] * _sequencia[i];
             somaSegundoAlgarismo += Digitos[i + 1] * _sequencia[i];
